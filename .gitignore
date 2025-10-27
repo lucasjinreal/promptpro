@@ -1,0 +1,9 @@
+target/
+*.lock
+*.vault
+.vscode/
+__pycache__/
+*.egg
+*.so
+build/
+.vscode/

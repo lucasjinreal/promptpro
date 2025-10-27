@@ -1,0 +1,37 @@
+[build-system]
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "promptpro"
+version = "0.1.0"
+description = "PromptPro - A prompt versioning and management system with Python bindings"
+readme = "README.md"
+license = { text = "GPL-3.0-only" }
+authors = [
+    { name = "jinfagang", email = "jinfagang@163.com" }
+]
+keywords = ["ai", "prompt-engineering", "versioning", "management", "python-bindings"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities"
+]
+requires-python = ">=3.8"
+
+[project.urls]
+Homepage = "https://github.com/lucasjinreal/promptpro"
+Repository = "https://github.com/lucasjinreal/promptpro"
+Documentation = "https://docs.rs/promptpro"
+
+[tool.maturin]
+features = ["python"]

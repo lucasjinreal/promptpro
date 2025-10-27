@@ -1,0 +1,1 @@
+cargo publish --registry crates-io --allow-dirty
