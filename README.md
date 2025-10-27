@@ -20,6 +20,7 @@ Your chaos prompt can be easily use like this (note, any project, any language):
 ```py
 from promptpro import PromptManager
 
+pm = PromptManager("promptpro.vault", "")
 a = pm.get_prompt("pc_operator_v2", "dev")
 print(a)
 ```
