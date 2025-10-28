@@ -1,5 +1,6 @@
 use crate::{PromptVault, VersionMeta, VersionSelector};
 use pyo3::prelude::*;
+use pyo3::types::PyList;
 
 /// Python wrapper for VersionMeta
 #[pyclass]
@@ -141,6 +142,13 @@ impl PyPromptVault {
             .get_latest_version_number(key)
             .map_err(|e| PyErr::new::<pyo3::exceptions::PyException, _>(e.to_string()))
     }
+
+    /// Delete a prompt key and all its versions
+    fn delete(&self, key: &str) -> PyResult<()> {
+        self.inner
+            .delete_prompt_key(key)
+            .map_err(|e| PyErr::new::<pyo3::exceptions::PyException, _>(e.to_string()))
+    }
 }
 
 /// Parse Python object to VersionSelector
@@ -253,6 +261,44 @@ impl PySyncPromptManager {
             .backup(path, password)
             .map_err(|e| PyErr::new::<pyo3::exceptions::PyException, _>(e.to_string()))
     }
+
+    /// Delete a prompt key and all its versions
+    fn delete_prompt(&self, key: &str) -> PyResult<()> {
+        self.inner
+            .delete_prompt(key)
+            .map_err(|e| PyErr::new::<pyo3::exceptions::PyException, _>(e.to_string()))
+    }
+}
+
+/// Python wrapper for the CLI function
+#[pyfunction]
+fn run_cli(args: &PyList) -> PyResult<()> {
+    use pyo3::types::PyString;
+
+    // Convert Python list of arguments to Rust Vec<String>
+    let mut rust_args: Vec<String> = Vec::new();
+
+    // Add program name as the first argument (required by clap)
+    rust_args.push("promptpro".to_string());
+
+    for arg in args.iter() {
+        let py_str = arg
+            .downcast::<PyString>()
+            .map_err(|_| pyo3::exceptions::PyTypeError::new_err("Arguments must be strings"))?;
+        let str_arg = py_str
+            .to_str()
+            .map_err(|_| pyo3::exceptions::PyValueError::new_err("Invalid string in arguments"))?;
+        rust_args.push(str_arg.to_string());
+    }
+
+    // Call the CLI function with the arguments
+    match crate::run_cli_from_args(rust_args) {
+        Ok(()) => Ok(()),
+        Err(e) => Err(pyo3::exceptions::PyException::new_err(format!(
+            "CLI Error: {}",
+            e
+        ))),
+    }
 }
 
 /// Python module initialization
@@ -261,5 +307,6 @@ fn promptpro(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<PyPromptVault>()?;
     m.add_class::<PyVersionMeta>()?;
     m.add_class::<PySyncPromptManager>()?;
+    m.add_function(wrap_pyfunction!(run_cli, m)?)?;
     Ok(())
 }

@@ -203,6 +203,15 @@ class PromptVault:
         """
         return self._rust_vault.get_latest_version_number(key)
 
+    def delete(self, key: str):
+        """
+        Delete a prompt key and all its versions.
+
+        Args:
+            key: The key of the prompt to delete
+        """
+        self._rust_vault.delete(key)
+
 
 class DefaultPromptManager:
     """
@@ -312,6 +321,15 @@ class DefaultPromptManager:
             password: Optional password for encryption
         """
         self._rust_manager.backup(path, password)
+
+    def delete(self, key: str):
+        """
+        Delete a prompt key and all its versions.
+
+        Args:
+            key: The key of the prompt to delete
+        """
+        self._rust_manager.delete(key)
 
 
 # For backward compatibility

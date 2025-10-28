@@ -7,7 +7,10 @@ use std::io::{self, Write};
 pub async fn init(path: Option<String>) -> Result<()> {
     let vault_path = match path {
         Some(p) => std::path::PathBuf::from(p),
-        None => promptpro::default_vault_path()?,
+        None => {
+            let home_dir = std::env::var("HOME")?;
+            std::path::PathBuf::from(home_dir).join(".promptpro").join("default_vault")
+        },
     };
 
     std::fs::create_dir_all(&vault_path)?;
@@ -32,7 +35,6 @@ pub async fn add(content: String) -> Result<()> {
     
     println!("[+] Stored prompt under key: {}", key);
     println!("    version: 1 (snapshot)");
-    println!("    vault: {:?}", promptpro::default_vault_path()?);
 
     Ok(())
 }
@@ -49,7 +51,6 @@ pub async fn update(key: String, content: String, message: Option<String>) -> Re
             if let Ok(Some(version)) = get_latest_version_number(&vault, &key) {
                 println!("    version: {} (updated)", version);
                 println!("    'dev' tag automatically updated to latest version");
-                println!("    vault: {:?}", promptpro::default_vault_path()?);
             }
         },
         Err(e) => {
@@ -205,6 +206,23 @@ pub async fn dump(output: String, password: Option<String>) -> Result<()> {
         }
     }
     
+    Ok(())
+}
+
+/// Delete a prompt key and all its versions
+pub async fn delete(key: String) -> Result<()> {
+    let vault = PromptVault::open_default()?;
+    
+    match vault.delete_prompt_key(&key) {
+        Ok(()) => {
+            println!("[+] Deleted prompt: {}", key);
+        },
+        Err(e) => {
+            eprintln!("Error deleting prompt: {}", e);
+            std::process::exit(1);
+        }
+    }
+
     Ok(())
 }
 

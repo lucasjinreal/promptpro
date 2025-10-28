@@ -93,6 +93,7 @@ enum Commands {
     },
 }
 
+/// Main function for the CLI binary
 #[tokio::main]
 async fn main() -> Result<()> {
     let cli = Cli::parse();
@@ -110,4 +111,34 @@ async fn main() -> Result<()> {
         Commands::Dump { output, password } => commands::dump(output, password).await,
         Commands::Resume { input, password } => commands::resume(input, password).await,
     }
+}
+
+/// Function that can be called from Python to run CLI commands with arguments
+pub fn run_cli_from_args(args: Vec<String>) -> Result<()> {
+    // Skip the first argument since it's typically the program name
+    let cli_args = if !args.is_empty() {
+        args
+    } else {
+        vec!["promptpro".to_string()] // Default to showing help if no args
+    };
+    
+    // Parse the arguments using clap
+    let cli = Cli::try_parse_from(cli_args)?;
+    
+    // Execute the command based on the parsed arguments
+    tokio::runtime::Runtime::new()?.block_on(async {
+        match cli.command {
+            Commands::Init { path } => commands::init(path).await,
+            Commands::Add { content } => commands::add(content).await,
+            Commands::Update { key, content, message } => commands::update(key, content, message).await,
+            Commands::Get { key, selector, output } => commands::get(key, selector, output).await,
+            Commands::History { key } => commands::history(key).await,
+            Commands::Tag { key, tag, version } => commands::tag(key, tag, version).await,
+            Commands::Promote { key, tag } => commands::promote(key, tag).await,
+            Commands::Tui => commands::tui().await,
+            Commands::Edit { key } => commands::edit(key).await,
+            Commands::Dump { output, password } => commands::dump(output, password).await,
+            Commands::Resume { input, password } => commands::resume(input, password).await,
+        }
+    })
 }

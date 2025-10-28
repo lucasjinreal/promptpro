@@ -87,3 +87,7 @@ class PromptManager:
     def backup(self, path: str, password: Optional[str] = None):
         """Backup the vault to a file."""
         self._rust_vault.backup(path, password)
+
+    def delete(self, key: str):
+        """Delete a prompt key and all its versions."""
+        self._rust_vault.delete(key)

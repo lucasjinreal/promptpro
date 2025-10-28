@@ -1,6 +1,6 @@
 # PromptPro🚀: Advanced Prompt Manage and Versioning System
 
-![](./assets/image.png)
+![](./assets/image1.png)
 
 
 **Promptpro** is a powerful, flexible, and developer-friendly prompt management system that transforms how you create, manage, and version AI prompts. Designed for prompt engineers, AI developers, and serious AI enthusiasts, it combines speed, security, and usability in one elegant tool.
@@ -64,6 +64,8 @@ cd promptpro
 
 ./install.sh
 ```
+
+![](assets/image.png)
 
 ### Basic Usage
 

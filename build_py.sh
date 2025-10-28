@@ -68,6 +68,8 @@ build_mac_local() {
   fi
   ensure_cmd maturin
 
+
+
   # Try universal2 (Intel+Apple Silicon). If it fails, retry without it.
   log "Attempting maturin build with --universal2 (mac universal wheel)"
   set +e
@@ -173,15 +175,15 @@ log "Starting build process"
 log "Python versions: ${PY_VERSIONS[*]}"
 log "Output dir: $OUTPUT_DIR, target dir: $BUILD_TARGET_DIR"
 
-if $is_mac; then
-  build_mac_local
-else
-  log "Not macOS; skipping local mac build"
-fi
+# if $is_mac; then
+#   build_mac_local
+# else
+#   log "Not macOS; skipping local mac build"
+# fi
 
-build_linux_manylinux_docker
+# build_linux_manylinux_docker
 
-collect_wheels
+# collect_wheels
 
 upload_to_pypi
 

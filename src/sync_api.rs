@@ -72,6 +72,13 @@ impl SyncPromptManager {
         Ok(())
     }
 
+    /// Delete a prompt key and all its versions
+    pub fn delete_prompt(&self, key: &str) -> Result<()> {
+        let vault = self.vault.write().unwrap();
+        vault.delete_prompt_key(key)?;
+        Ok(())
+    }
+
     /// Restore from backup
     pub fn restore(&self, path: &str, password: Option<&str>) -> Result<()> {
         // This is a bit more complex as we need to restore to the current vault

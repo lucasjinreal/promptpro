@@ -4,7 +4,7 @@ build-backend = "maturin"
 
 [project]
 name = "promptpro"
-version = "0.1.0"
+version = "0.1.1"
 description = "PromptPro - A prompt versioning and management system with Python bindings"
 readme = "README.md"
 license = { text = "GPL-3.0-only" }
@@ -35,3 +35,8 @@ Documentation = "https://docs.rs/promptpro"
 
 [tool.maturin]
 features = ["python"]
+strip = true 
+bindings = "pyo3"
+
+[project.scripts]
+ppro = "promptpro.cli:main"

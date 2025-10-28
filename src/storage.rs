@@ -381,6 +381,35 @@ impl PromptVault {
         &self.db
     }
 
+    /// Delete a prompt key and all its versions
+    pub fn delete_prompt_key(&self, key: &str) -> Result<()> {
+        // Get all versions for this key to clean up related data
+        let versions = self.history(key)?;
+        
+        // Delete all version entries and related content/diff data
+        for version in &versions {
+            let version_key = format!("version:{}:{}", key, version.version);
+            self.db.remove(version_key.as_bytes())?;
+            
+            // Delete content for this version
+            let content_key = format!("content:{}:{}", key, version.version);
+            self.db.remove(content_key.as_bytes())?;
+            
+            // Delete diff if it exists (for future compatibility)
+            let diff_key = format!("diff:{}:{}", key, version.version);
+            self.db.remove(diff_key.as_bytes())?;
+        }
+        
+        // Delete all tag entries for this key
+        let tag_prefix = format!("tag:{}:", key);
+        for result in self.db.scan_prefix(tag_prefix.as_bytes()) {
+            let (tag_key, _) = result?;
+            self.db.remove(tag_key)?;
+        }
+        
+        Ok(())
+    }
+
     /// Export the entire vault to a binary file
     pub fn dump(&self, output_path: &str, password: Option<&str>) -> Result<()> {
         use std::fs::File;
