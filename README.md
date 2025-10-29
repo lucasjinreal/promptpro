@@ -23,9 +23,14 @@ from promptpro import PromptManager
 pm = PromptManager("promptpro.vault", "")
 a = pm.get_prompt("pc_operator_v2", "dev")
 print(a)
+# you are a super helpful computer use assistant...
 ```
 
 That's all! You got speed and security, also fastest prompt development.
+
+![](assets/image2.png)
+
+Easily track each changes of your prompt, never lose and keeping organized.
 
 
 ## ✨ Key Features
