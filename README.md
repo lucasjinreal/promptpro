@@ -88,7 +88,7 @@ cd promptpro
 
 ```bash
 # Add a new prompt
-echo "Write a poem about technology" | ppro add
+ppro add "Write a poem about technology"
 
 # Add with a key
 ppro add "You are a helpful AI assistant"
