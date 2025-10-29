@@ -32,6 +32,16 @@ That's all! You got speed and security, also fastest prompt development.
 
 Easily track each changes of your prompt, never lose and keeping organized.
 
+Just try:
+
+```
+echo 'Act as a professional writer — your tone is confident, polished, and natural.' | ppro add
+# set a key to this system prompt
+ppro get writer
+```
+
+Then you can use `writer` prompt at anywhere without a single piece of json or yaml or anywhere else.
+
 
 ## ✨ Key Features
 
