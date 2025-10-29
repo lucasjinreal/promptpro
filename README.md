@@ -35,7 +35,7 @@ Easily track each changes of your prompt, never lose and keeping organized.
 Just try:
 
 ```
-echo 'Act as a professional writer — your tone is confident, polished, and natural.' | ppro add
+ppro add "Act as a professional writer — your tone is confident, polished, and natural."
 # set a key to this system prompt
 ppro get writer
 ```
